@@ -1,0 +1,38 @@
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/page/ [NC]
+RewriteRule ^ - [F,L]
+# Rewrite URLs with random string to page directory for PHP files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[^/]+/(.+)$ page/$1.php [L,QSA]
+
+# Rewrite URLs with random string to page directory for CSS files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[^/]+/css(/.*)?$ page/css$1 [L,QSA]
+
+# Rewrite URLs with random string to page directory for CSS files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[^/]+/template(/.*)?$ page/template$1 [L,QSA]
+
+
+# Rewrite URLs with random string to page directory for JavaScript files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[^/]+/js(/.*)?$ page/js$1 [L,QSA]
+
+# Rewrite URLs with random string to page directory for images (jpg, jpeg, png, gif)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[^/]+/images(/.*)?$ page/images$1 [L,QSA]
+
+# Ensure no direct access to the page directory
+RewriteCond %{REQUEST_URI} ^/page/
+RewriteRule ^ - [F,L]
