@@ -1,4 +1,0 @@
-:80 {
-    reverse_proxy php-app:80
-}
-
