@@ -1,0 +1,973 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: url('../images/bak.svg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 15vh;
+    position: relative;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.login-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 440px;
+    padding: 32px 44px 0px; /* Reduced top padding */
+    position: relative;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+    /* Remove max-height and overflow properties */
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.company-logo {
+    width: 108px; /* Reduced from 119px */
+    height: 24px; /* Reduced from 26px */
+    margin: 0 auto 36px auto; /* Reduced bottom margin */
+    display: block;
+}
+
+.login-title {
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, "system-ui", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 21px; /* Reduced from 22px */
+    font-weight: 600;
+    color: #323130;
+    margin-bottom: 18px; /* Reduced from 20px */
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: #605e5c;
+    margin-bottom: 18px; /* Reduced from 20px */
+}
+
+.input-group {
+    margin-bottom: 8px;
+    position: relative;
+    min-height: 52px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 20px 48px 8px 12px;
+    border: 1px solid #605e5c;
+    border-radius: 6px;
+    font-size: 15px;
+    background: white;
+    transition: all 0.2s ease;
+    position: relative;
+    height: 52px;
+    box-sizing: border-box;
+}
+
+.input-field:focus {
+    outline: none;
+    border-top: 1px solid #605e5c;
+    border-left: 1px solid #605e5c;
+    border-right: 1px solid #605e5c;
+    border-bottom: 2px solid #0078d4;
+    padding: 19px 47px 7px 11px;
+}
+
+.input-field::placeholder {
+    color: transparent;
+}
+
+.floating-label {
+    position: absolute;
+    left: 12px;
+    top: 16px;
+    color: #605e5c;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    background: white;
+    padding: 0 4px;
+}
+
+.input-field:focus + .floating-label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+    color: #605e5c;
+}
+
+.input-field:not(:placeholder-shown) + .floating-label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+    color: #605e5c;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 26px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #605e5c;
+    font-size: 16px;
+    user-select: none;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.password-toggle:hover {
+    color: #0078d4;
+}
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.error-message {
+    color: #d13438;
+    font-size: 13px;
+    margin-top: 4px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 10;
+    background: white;
+    padding: 2px 0;
+}
+
+.error-message.show {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.error-icon {
+    flex-shrink: 0;
+}
+
+.input-field.error {
+    border-color: #d13438 !important;
+    border: 2px solid #d13438 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 1px #d13438 !important;
+}
+
+.input-field.error:focus {
+    border-top: 1px solid #d13438 !important;
+    border-left: 1px solid #d13438 !important;
+    border-right: 1px solid #d13438 !important;
+    border-bottom: 2px solid #d13438 !important;
+    border: 2px solid #d13438 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 1px #d13438 !important;
+}
+
+/* Override any hover states for error inputs */
+.input-field.error:hover {
+    border-color: #d13438 !important;
+}
+
+/* Anti-bot honeypot fields */
+.honeypot {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    pointer-events: none !important;
+}
+
+/* Step 2 error message styling */
+#step2Error {
+    color: #d13438 !important;
+    background: rgba(209, 52, 56, 0.1) !important;
+    border: 1px solid #d13438 !important;
+    border-radius: 4px !important;
+    padding: 12px !important;
+    margin-bottom: 16px !important;
+    font-size: 12px !important;
+    text-align: left !important;
+    align-items: center !important;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label {
+    font-size: 15px;
+    color: #323130;
+    cursor: pointer;
+    user-select: none;
+}
+
+.forgot-password {
+    color: #0078d4;
+    text-decoration: none;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, "system-ui", Roboto, "Helvetica Neue", sans-serif;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-size: 14px;
+    font-size-adjust: none;
+    font-stretch: 100%;
+    font-style: normal;
+    font-variant-alternates: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-emoji: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-position: normal;
+    font-variation-settings: normal;
+    font-weight: 600;
+    margin-bottom: 24px;
+    /* margin-top: 0px; */
+    display: inline-block;
+}
+
+.sign-in-different {
+    color: #0078d4;
+    text-decoration: none;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, "system-ui", Roboto, "Helvetica Neue", sans-serif;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-size: 14px;
+    font-size-adjust: none;
+    font-stretch: 100%;
+    font-style: normal;
+    font-variant-alternates: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-emoji: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-position: normal;
+    font-variation-settings: normal;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: inline-block;
+}
+
+.sign-in-different:hover {
+    text-decoration: underline;
+}
+
+.btn-primary {
+    background: #0078d4;
+    color: white;
+    border: 1px solid #0078d4;
+    border-radius: 2px;
+    padding: 11px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary:hover {
+    background: #106ebe;
+    border-color: #106ebe;
+}
+
+.btn-primary:active {
+    background: #005a9e;
+    border-color: #005a9e;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #0078d4;
+    border: 1px solid #0078d4;
+    border-radius: 2px;
+    padding: 11px 32px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #f3f2f1;
+}
+
+.divider {
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+    color: #605e5c;
+    font-size: 15px;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #d2d0ce;
+    z-index: 1;
+}
+
+.divider span {
+    background: white;
+    padding: 0 16px;
+    position: relative;
+    z-index: 2;
+}
+
+.sign-in-options {
+    margin-top: 24px;
+}
+
+.sign-in-option {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px;
+    border: 1px solid #8a8886;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #323130;
+}
+
+.sign-in-option:hover {
+    background: #f3f2f1;
+    border-color: #323130;
+}
+
+.sign-in-option img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+}
+
+.privacy-links {
+    text-align: center;
+    color: #605e5c;
+    font-size: 13px;
+    margin-top: 20px;
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Keep z-index */
+    /* Remove background */
+    padding: 5px 0;
+}
+
+.privacy-links a {
+    color: #605e5c;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0 8px;
+}
+
+.privacy-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-notice {
+    text-align: center;
+    color: #605e5c;
+    font-size: 11px;
+    margin-top: 12px;
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Keep z-index */
+    /* Remove background */
+    padding: 5px 0;
+}
+
+.footer-notice a {
+    color: #0078d4;
+    text-decoration: none;
+}
+
+.footer-notice a:hover {
+    text-decoration: underline;
+}
+
+/* Hide mobile-only elements on desktop */
+.mobile-only {
+    display: none;
+}
+
+.loading {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0078d4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto 24px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.login-container.loading-state {
+    background: white;
+    pointer-events: none;
+    position: relative;
+    min-height: auto;
+}
+
+.login-container.loading-state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(128, 128, 128, 0.3);
+    border-radius: 8px;
+    z-index: 5;
+}
+
+.login-container.loading-state .loading {
+    position: relative;
+    z-index: 6;
+}
+
+.form-options {
+    transition: opacity 0.3s ease;
+    min-height: 120px;
+}
+
+.form-options.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.form-options-step1 {
+    transition: opacity 0.3s ease;
+    min-height: 60px;
+}
+
+.form-options-step1.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.btn-primary.loading {
+    pointer-events: none;
+    background: #6c757d !important;
+    border-color: #6c757d !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 2px !important;
+    transform: none !important;
+    animation: none !important;
+    min-width: 100%;
+    min-height: 44px;
+    padding: 11px 32px !important;
+}
+
+.btn-primary.loading:hover {
+    background: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.btn-primary.loading .btn-text {
+    visibility: hidden;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform-origin: center;
+}
+
+@media (max-width: 768px) {
+    .form-options {
+        min-height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background: white;
+        padding: 0;
+        align-items: flex-start;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .main-content {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 100px);
+    }
+    
+    .login-container {
+        background: white;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+        padding: 20px;
+        margin: 0;
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        position: relative;
+        flex: 1;
+    }
+
+    .login-container.loading-state {
+        min-height: calc(100vh - 140px);
+    }
+
+    .login-container.loading-state::before {
+        position: fixed;
+        border-radius: 0;
+    }
+
+    /* Hide desktop fixed footer on mobile */
+    .privacy-links:not(.mobile-only),
+    .footer-notice:not(.mobile-only) {
+        display: none;
+    }
+
+    /* Show mobile-only elements */
+    .mobile-only {
+        display: block;
+    }
+
+    .privacy-links.mobile-only {
+        position: fixed;
+        bottom: 50px;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        padding-top: 0;
+        text-align: center;
+        z-index: 10;
+    }
+    
+    .privacy-links.mobile-only a {
+        font-size: 14px;
+        display: inline-block;
+        margin: 4px 8px;
+    }
+
+    .footer-notice.mobile-only {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        padding-bottom: 0;
+        text-align: center;
+        font-size: 11px;
+        z-index: 10;
+    }
+    
+    .company-logo {
+        margin: 20px auto 30px auto;
+        display: block;
+    }
+    
+    .login-title {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+    
+    .login-subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .input-field {
+        border: 1px solid #d1d1d1;
+        border-radius: 6px;
+        padding: 20px 40px 8px 16px;
+        font-size: 16px;
+        margin-bottom: 0px;
+    }
+    
+    .input-field:focus {
+        border-top: 1px solid #d1d1d1;
+        border-left: 1px solid #d1d1d1;
+        border-right: 1px solid #d1d1d1;
+        border-bottom: 2px solid #0078d4;
+        padding: 19px 39px 7px 15px;
+    }
+    
+    .floating-label {
+        left: 16px;
+        font-size: 14px;
+    }
+    
+    .input-field:focus + .floating-label,
+    .input-field:not(:placeholder-shown) + .floating-label {
+        font-size: 12px;
+        left: 12px;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+        width: 100%;
+    }
+    
+    .btn-primary {
+        background: #0078d4;
+        border-color: #0078d4;
+    }
+    
+    .btn-primary:hover {
+        background: #106ebe;
+        border-color: #106ebe;
+    }
+    
+    .btn-primary.loading {
+        background: #6c757d !important;
+        border-color: #6c757d !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 6px !important;
+        transform: none !important;
+        animation: none !important;
+        padding: 14px !important;
+        min-height: 48px;
+    }
+    
+    .forgot-password {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .sign-in-different {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .divider {
+        margin: 20px 0;
+    }
+    
+    .sign-in-option {
+        padding: 14px 16px;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+    
+    .user-tile {
+        border-radius: 6px;
+        padding: 12px 16px;
+    }
+    
+    .back-button {
+        top: 15px;
+        left: 15px;
+        font-size: 18px;
+    }
+    
+    .private-browsing-notice {
+        background: #f8f9fa;
+        border: 1px solid #e1dfdd;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin: 20px 0;
+        font-size: 14px;
+        color: #605e5c;
+        text-align: center;
+    }
+    
+    .private-browsing-notice a {
+        color: #0078d4;
+        text-decoration: none;
+    }
+    
+    .private-browsing-notice a:hover {
+        text-decoration: underline;
+    }
+}
+
+.email-display {
+    border: 1px solid #d1d1d1;
+    border-radius: 50px;
+    padding: 8px 16px;
+    background: white;
+    font-size: 16px;
+    color: #605e5c;
+    font-weight: 500;
+    margin-bottom: 24px;
+    text-align: center;
+    display: inline-block;
+    width: auto;
+}
+
+.step {
+    display: block;
+}
+
+.step.hidden {
+    display: none;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #d1d1d1;
+    border-radius: 2px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #0078d4;
+    border-color: #0078d4;
+}
+
+/* Step 3 - Authenticator Styles */
+.authenticator-video-container {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0; /* Reduced margin further */
+}
+
+.shield-video {
+    width: 160px; /* Reduced size further */
+    height: 160px; /* Reduced size further */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shield-video video {
+    width: 130px; /* Reduced size further */
+    height: 130px; /* Reduced size further */
+    object-fit: contain;
+}
+
+.verification-number {
+    text-align: center;
+    margin: 15px 0; /* Reduced margin */
+}
+
+.number-display {
+    display: inline-block;
+    font-size: 28px; /* Reduced from 32px */
+    font-weight: 400;
+    color: #323130;
+    letter-spacing: 1px;
+}
+
+.authenticator-instruction {
+    font-size: 13px; /* Reduced size further */
+    color: #605e5c;
+    text-align: center;
+    margin-bottom: 16px; /* Reduced margin further */
+    line-height: 1.4;
+}
+
+.authenticator-options {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .shield-video {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .shield-video video {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .number-display {
+        font-size: 28px;
+    }
+    
+    .authenticator-instruction {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    /* Specific styles for step 3 container */
+    #step3 {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-bottom: 120px; /* Add space for footer */
+    }
+
+    /* Reduce excessive margins for step 3 elements */
+    #step3 .company-logo {
+        margin: 10px auto 20px auto;
+    }
+
+    #step3 .email-display {
+        margin-bottom: 16px;
+    }
+
+    #step3 .login-title {
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    #step3 .authenticator-video-container {
+        margin: 20px 0;
+    }
+
+    #step3 .verification-number {
+        margin: 16px 0;
+    }
+
+    #step3 .authenticator-instruction {
+        margin-bottom: 20px;
+    }
+
+    #step3 .authenticator-options {
+        margin-top: 16px;
+    }
+}
+
+/* Step 4 - Approval Panel Styles */
+.company-logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.email-display {
+    text-align: center;
+    font-size: 16px;
+    color: #323130;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.approval-options {
+    margin-top: 32px;
+}
+
+.sign-in-different {
+    color: #0078d4;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sign-in-different:hover {
+    color: #106ebe;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    #step4 {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-bottom: 120px;
+    }
+
+    #step4 .company-logo {
+        margin: 10px auto 20px auto;
+    }
+
+    #step4 .email-display {
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    #step4 .login-title {
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    #step4 .authenticator-video-container {
+        margin: 20px 0;
+    }
+
+    #step4 .authenticator-instruction {
+        margin-bottom: 20px;
+    }
+
+    #step4 .approval-options {
+        margin-top: 20px;
+    }
+}

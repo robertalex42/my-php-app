@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Skip if the request is for an existing file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite requests without .php extension to the corresponding .php file
+RewriteRule ^([^/]+)$ $1.php [L,QSA]
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>

