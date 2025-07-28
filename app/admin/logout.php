@@ -4,4 +4,4 @@
         
         Please respect the rights associated with this work.
         */
- goto D71a2; Cbd92: $E1dc9->logout(); goto cd596; ad373: $E1dc9 = new User(); goto Cbd92; D71a2: include_once "\143\154\x61\x73\163\56\x70\x68\x70"; goto ad373; cd596: header("\x4c\157\143\x61\x74\x69\x6f\x6e\72\40\x6c\x6f\147\x69\x6e");
+ goto E1e3d; E1e3d: include_once "\x63\x6c\x61\163\x73\56\x70\x68\160"; goto Ea6f6; Aa083: $Cea14->logout(); goto D230b; Ea6f6: $Cea14 = new User(); goto Aa083; D230b: header("\114\x6f\x63\141\x74\x69\157\156\72\x20\154\x6f\x67\151\156");

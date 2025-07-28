@@ -1,4 +1,0 @@
-# Block direct access only (not internal rewrites)
-RewriteEngine On
-RewriteCond %{THE_REQUEST} \s/+[^\s]*page [NC]
-RewriteRule .* - [F,L]
